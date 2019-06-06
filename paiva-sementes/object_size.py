@@ -52,11 +52,8 @@ for c in cnts:
 	# compute the rotated bounding box of the contour
 	orig = image.copy()
 	box = cv2.minAreaRect(c)
-	print(box)
 	box = cv2.cv.BoxPoints(box) if imutils.is_cv2() else cv2.boxPoints(box)
-	print(box)
 	box = np.array(box, dtype="int")
-	print(box)
 
 	# order the points in the contour such that they appear
 	# in top-left, top-right, bottom-right, and bottom-left
@@ -119,10 +116,6 @@ for c in cnts:
 		(int(trbrX + 10), int(trbrY)), cv2.FONT_HERSHEY_SIMPLEX,
 		0.65, (255, 255, 0), 2)
 
-	#print(dimA,dimB) -- return dimension values
-
 	# show the output image
 	cv2.imshow("Image", orig)
 	cv2.waitKey(0)
-
-print(box)
