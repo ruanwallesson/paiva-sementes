@@ -1,0 +1,122 @@
+import os
+from back import manipula, logdim
+import winsound
+#import matplotlib.pyplot as plt
+
+arq = os.listdir(os.path.expanduser("C:\\Users\\ander\\Documents\\algoritmos\\brincando"))#recebe a pasta com as fotos
+nome = 'test'
+for i in arq:
+    print(i)
+    if 'jpg' in i:#se for uma imagem jpg
+        largura, diametro = manipula(i)
+        x=round(diametro,2)
+        y=round(largura,2)
+        print("oi")
+        logdim(i[:len(i)-4], x, y, nome)
+print('terminado')
+
+for i in range(3):
+    winsound.PlaySound('sound.wav', winsound.SND_FILENAME)
+
+import cv2
+import numpy
+
+#recebe a imagem
+def manipula(name):
+        img = cv2.imread(name)
+        img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+        
+        kernel = cv2.getStructuringElement(cv2.MORPH_CROSS,(15,15))
+        closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
+        img = cv2.GaussianBlur(closing, (3, 3), 0)
+        
+        _,threshold = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+        threshold = threshold[500:3500, 1000:3500]
+
+        #corta a imagem
+#        if len(threshold) > len(threshold[0]):
+#            threshold = numpy.resize(threshold,(3024,4032))
+#        threshold = threshold[1000:1980, 1200:2900]
+
+        #mostra imagem na tela
+        #cv2.imshow('threshold', threshold)
+        #cv2.wiatkey(0)
+        cv2.imwrite(name[:len(name)-4]+'.png', threshold)
+        return contadim(threshold)
+
+
+
+def contadim(img):
+
+        #o 'i' vai de 0 até o tamanho 
+        diametro = largura = posi = posf = 0
+
+        for i in img:
+            soma = contador = 0
+            for j in i:
+                if j == 0:
+                    if soma == 0:
+                        posi = contador
+                    else:
+                        posf = contador
+                    soma += 1
+                contador += 1 
+            if posf-posi > largura:
+                largura = posf-posi
+        img = numpy.resize(img,(4032,3024))
+        posi = posf = 0
+        for i in img:
+            soma = 0
+            contador = 0
+            for j in i:
+                if j == 0:
+                    if soma == 0:
+                        posi = contador
+                    else:
+                        posf = contador
+                    soma += 1
+                contador += 1
+            if posf-posi > diametro:
+                diametro = posf - posi
+        
+        return ((diametro*0.264/20), (largura*0.264/10))
+
+#        print(len(img))
+#        for linha in range(len(img)):
+#            if 0 in img[linha]: 
+#                for vetor in range(len(img[linha])):
+#                    soma1 = 0
+#                    if img[linha][vetor] == 0:
+#                        coluna = vetor
+#                        soma1 += 1
+#                        soma2 = 1
+#                        for j in range(linha, len(img)):
+#                            if img[j][coluna] == 0:
+#                                soma2 += 1
+#                        if soma2 > altura:
+#                            altura = soma2
+#                    if soma1 > largura:
+#                        largura = soma1
+        
+
+
+def logdim(nome, alt, lar, txt):
+#	try:
+		nome, alt, lar = str(nome), str(alt), str(lar)
+		arq = open(txt+'.txt', 'a')
+		arq.write("{}, {}, {}\n".format(nome,alt,lar))
+		arq.close()
+#	except:
+#		print("Parametros incorretos: (nome do arquivo, altura, largura)")
+#
+#def pixels(linha):
+#    white = 0
+#    posi1, pos2 =0
+#    for i in len(linha):
+#        if linha[i] == 0:
+#            posi1 = i
+#    while white < 10:
+#        celula = linha[posi1+1]
+#        if celula == 0:
+#            pos2 = posi1+1
+#        
