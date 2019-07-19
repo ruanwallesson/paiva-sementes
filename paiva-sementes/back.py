@@ -34,7 +34,7 @@ for i in threshold:
 #mostra como a imagem esta
 plt.imshow(threshold)
 
-#salva a imagem
+#salva a imagemm
 cv2.imwrite('Salvo.png', threshold)
 print('diametro %.2f' %(largura/37.398373983739837398373983739837))
 print('largura %.2f' %(altura/35.827435119649477586788001348163))
